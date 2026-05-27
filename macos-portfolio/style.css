@@ -1,0 +1,2081 @@
+/* Abhijeet Sharma - macOS Premium Interactive Portfolio Stylesheet */
+
+/* 1. DESIGN SYSTEM & INITIALIZATION */
+:root {
+  /* System Font Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Outfit", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+
+  /* HSL Tailored Dark Theme Color Palette */
+  --bg-primary: hsla(240, 10%, 4%, 0.75);
+  --bg-secondary: hsla(240, 8%, 10%, 0.85);
+  --bg-tertiary: hsla(240, 6%, 15%, 0.9);
+  
+  --text-primary: hsl(0, 0%, 96%);
+  --text-secondary: hsl(240, 5%, 70%);
+  --text-muted: hsl(240, 4%, 48%);
+  
+  --border-glass: hsla(0, 0%, 100%, 0.15);
+  --border-glass-thick: hsla(0, 0%, 100%, 0.25);
+  --bg-glass: hsla(240, 10%, 8%, 0.4);
+  --bg-glass-active: hsla(240, 10%, 15%, 0.6);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 0 0 1px hsla(0, 0%, 100%, 0.08);
+
+  --accent-color: hsl(260, 85%, 65%);
+  --accent-color-hover: hsl(260, 90%, 75%);
+  
+  /* System Sounds */
+  --sfx-volume: 0.8;
+  
+  /* Brightness filter overlay */
+  --sys-brightness: 100%;
+}
+
+[data-theme="light"] {
+  --bg-primary: hsla(355, 25%, 96%, 0.75); /* Rosy champagne warm white to match the burgundy theme */
+  --bg-secondary: hsla(355, 20%, 98%, 0.88); /* Lighter rosy champagne */
+  --bg-tertiary: hsla(355, 15%, 92%, 0.9);
+  
+  --text-primary: hsl(355, 25%, 12%);
+  --text-secondary: hsl(355, 12%, 32%);
+  --text-muted: hsl(355, 10%, 50%);
+  
+  --border-glass: hsla(355, 15%, 15%, 0.12);
+  --border-glass-thick: hsla(355, 15%, 15%, 0.22);
+  --bg-glass: hsla(355, 20%, 100%, 0.55);
+  --bg-glass-active: hsla(355, 15%, 90%, 0.75);
+  --shadow-glass: 0 8px 32px 0 rgba(94, 25, 20, 0.12), inset 0 0 0 1px hsla(355, 10%, 10%, 0.04);
+  
+  --accent-color: hsl(355, 60%, 40%); /* Rich burgundy accent matching the wallpaper! */
+  --accent-color-hover: hsl(355, 65%, 50%);
+  
+  --logo-invert: 0.85; /* Invert white Apple logo to dark burgundy-slate on light menu bar */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #050505;
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+  position: relative;
+}
+
+/* System Brightness Filter */
+.brightness-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0; /* Updated dynamically via control center */
+  pointer-events: none;
+  z-index: 999999;
+  mix-blend-mode: multiply;
+  transition: opacity 0.15s ease-out;
+}
+
+/* 2. BOOT SCREEN STYLING */
+.boot-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000 !important; /* Always black boot screen as requested */
+  color: #fff !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
+}
+
+.apple-logo {
+  filter: drop-shadow(0 2px 12px rgba(255, 255, 255, 0.3));
+  animation: logo-pulsate 2.5s ease-in-out infinite;
+}
+
+.boot-container.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.apple-logo {
+  color: #fff;
+  filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.15));
+  animation: logo-pulsate 2.5s ease-in-out infinite;
+}
+
+@keyframes logo-pulsate {
+  0%, 100% { opacity: 0.95; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(0.98); }
+}
+
+.glass-btn {
+  font-family: var(--font-sans);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem 2rem;
+  border-radius: 999px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar-wrapper {
+  width: 200px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+  transition: opacity 0.3s;
+}
+
+.progress-bar-wrapper.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #fff;
+  border-radius: 99px;
+  transition: width 0.1s linear;
+}
+
+/* 3. DESKTOP WRAPPER & BACKGROUND */
+.desktop-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('wallpaper.png');
+  background-size: cover;
+  background-position: center;
+  transition: filter 0.8s ease-out;
+}
+
+.desktop-wrapper.blur-in {
+  filter: blur(20px);
+}
+
+.desktop-wrapper.unblur {
+  filter: blur(0px);
+}
+
+/* 4. TOP MENU BAR */
+.menu-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--border-glass);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+}
+
+.menu-left, .menu-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.menu-btn:hover {
+  background-color: var(--bg-glass-active);
+}
+
+.apple-icon-btn {
+  padding: 0 8px;
+}
+
+.active-app-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.menu-app-options {
+  display: flex;
+  gap: 4px;
+}
+
+.menu-icon {
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.menu-icon:hover {
+  opacity: 1;
+}
+
+.menu-clock {
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+/* Dropdown Menus */
+.menu-item-wrapper {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  min-width: 200px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass-thick);
+  border-radius: 8px;
+  padding: 5px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  z-index: 1001;
+  backdrop-filter: blur(30px);
+}
+
+.dropdown-menu.show {
+  display: flex;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 6px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-glass);
+  margin: 4px 0;
+}
+
+/* 5. CONTROL CENTER POP-OVER */
+.control-center {
+  position: absolute;
+  top: 36px;
+  right: 12px;
+  width: 320px;
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass-thick);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 2000;
+  backdrop-filter: blur(35px) saturate(180%);
+}
+
+.control-center.show {
+  display: flex;
+}
+
+.cc-row {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.cc-box {
+  flex: 1;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cc-box.active {
+  background: var(--bg-glass-active);
+  border-color: var(--border-glass-thick);
+}
+
+.cc-box:hover {
+  background: var(--bg-glass-active);
+}
+
+.cc-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background-color 0.2s;
+}
+
+.cc-box.active .cc-icon-circle {
+  background: var(--accent-color);
+  color: white;
+}
+
+.cc-box-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cc-sub {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+}
+
+.cc-row-equal {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.cc-small-box {
+  flex: 1;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.cc-small-box.active {
+  background: var(--bg-glass-active);
+}
+
+.cc-small-box.active .cc-icon-circle-small {
+  background: var(--accent-color);
+  color: white;
+}
+
+.cc-icon-circle-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-label {
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.cc-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cc-slider-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.cc-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.cc-slider-icon {
+  color: var(--text-secondary);
+}
+
+.cc-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.cc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* Control Center Music Widget */
+.cc-music-widget {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cc-music-widget:hover {
+  background-color: var(--bg-glass-active);
+}
+
+.widget-album-art {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.widget-album-art.active {
+  animation: vinyl-spin 4s linear infinite;
+}
+
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.widget-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.widget-track-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget-artist {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+}
+
+.widget-controls {
+  display: flex;
+}
+
+.widget-play-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* 6. DESKTOP CANVAS & SHORTCUTS */
+.desktop-canvas {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  bottom: 80px; /* Leave space for dock */
+  padding: 24px;
+}
+
+.desktop-grid {
+  display: grid;
+  grid-template-rows: repeat(auto-fill, 90px);
+  grid-auto-flow: column; /* macOS vertically stacks shortcuts on the right */
+  justify-content: end;
+  gap: 20px 24px;
+  height: 100%;
+}
+
+.grid-item {
+  width: 80px;
+  height: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 6px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.grid-item:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.grid-icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.grid-label {
+  font-size: 11.5px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+/* 7. DYNAMIC WINDOW CONTAINER */
+.window {
+  position: absolute;
+  min-width: 320px;
+  min-height: 240px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+  transform-origin: center bottom;
+  animation: window-open 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes window-open {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.window.focused {
+  border-color: var(--border-glass-thick);
+  box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.75), inset 0 0 0 1px hsla(0, 0%, 100%, 0.12);
+}
+
+.window.minimized {
+  transform: scale(0.01) translateY(600px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+}
+
+.window.maximized {
+  top: 28px !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - 28px) !important;
+  border-radius: 0;
+  transition: all 0.2s ease-out;
+}
+
+/* Window Title Bar Header */
+.window-header {
+  height: 40px;
+  background: var(--bg-glass-active);
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.window-controls-btns {
+  display: flex;
+  gap: 8px;
+  width: 60px;
+}
+
+.win-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.win-btn svg {
+  opacity: 0;
+  transition: opacity 0.15s;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.window-header:hover .win-btn svg {
+  opacity: 1;
+}
+
+.btn-close { background-color: #ff5f56; }
+.btn-minimize { background-color: #ffbd2e; }
+.btn-maximize { background-color: #27c93f; }
+
+.window-title {
+  flex: 1;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 60px; /* Offset the buttons to center the text */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Window Content Core */
+.window-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  background-color: var(--bg-primary);
+}
+
+/* Custom Scrollbars */
+.window-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.window-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.window-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Window Resize Handle */
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: se-resize;
+  z-index: 100;
+}
+
+/* 8. APPLICATION SPECIFIC WRAPPERS */
+
+/* ABOUT THIS MAC */
+.about-mac-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  gap: 1.5rem;
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  height: 100%;
+}
+
+.about-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #fc6076 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  border: 2px solid var(--border-glass-thick);
+}
+
+.about-mac-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.about-mac-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: -12px;
+}
+
+.about-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+  border-top: 1px solid var(--border-glass);
+  padding-top: 1.5rem;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.spec-name {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.spec-val {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* FINDER WINDOW */
+.finder-container {
+  display: flex;
+  height: 100%;
+}
+
+.finder-sidebar {
+  width: 160px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-glass);
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-item {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-item.active {
+  background-color: var(--bg-glass-active);
+  color: var(--accent-color-hover);
+}
+
+.sidebar-item svg {
+  color: var(--accent-color);
+  opacity: 0.9;
+}
+
+.finder-main {
+  flex: 1;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  grid-auto-rows: 90px;
+  gap: 16px;
+  align-content: start;
+}
+
+.finder-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 4px;
+  transition: background-color 0.2s;
+}
+
+.finder-file:hover {
+  background-color: var(--bg-glass-active);
+}
+
+.finder-file-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.finder-file-label {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* NOTES APP */
+.notes-container {
+  display: flex;
+  height: 100%;
+}
+
+.notes-sidebar {
+  width: 200px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-search {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.notes-search input {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  outline: none;
+}
+
+.notes-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-item {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.note-item:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.note-item.active {
+  background-color: hsla(260, 80%, 65%, 0.15);
+  border-left: 3px solid var(--accent-color);
+}
+
+.note-item-title {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-item-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.note-item-snippet {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notes-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.note-date-stamp {
+  font-size: 11px;
+  text-align: center;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.note-content-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--accent-color-hover);
+}
+
+.note-rich-text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.note-rich-text p {
+  margin-bottom: 1rem;
+}
+
+.note-rich-text ul {
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+}
+
+.note-rich-text li {
+  margin-bottom: 0.5rem;
+}
+
+.skills-pill-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.skill-pill {
+  background: var(--bg-glass-active);
+  border: 1px solid var(--border-glass);
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.skill-pill:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color-hover);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* MAIL APP */
+.mail-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mail-header-bar {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mail-input-row {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.mail-label {
+  color: var(--text-muted);
+  width: 50px;
+  font-weight: 500;
+}
+
+.mail-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 4px 0;
+  outline: none;
+}
+
+.mail-input:focus {
+  border-bottom-color: var(--accent-color);
+}
+
+.mail-body-editor {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mail-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.mail-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-glass);
+  background: var(--bg-secondary);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mail-send-btn {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.mail-send-btn:hover {
+  background-color: var(--accent-color-hover);
+}
+
+.mail-send-btn:active {
+  transform: scale(0.97);
+}
+
+/* TERMINAL SYSTEM */
+.terminal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #0c0c0e !important;
+  font-family: var(--font-mono);
+  padding: 16px;
+  color: #a9b1d6;
+}
+
+.terminal-history {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+}
+
+.terminal-ascii {
+  color: var(--accent-color-hover);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.terminal-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.terminal-prompt {
+  color: #4df8a9;
+  font-weight: 700;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  outline: none;
+}
+
+/* MUSIC & AUDIO PLAYER */
+.music-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, #150f24 100%);
+  gap: 1.25rem;
+}
+
+.music-player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.album-art-large {
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 54px;
+  transition: transform 0.3s;
+}
+
+.album-art-large.playing {
+  animation: vinyl-spin 6s linear infinite;
+  border-radius: 50%;
+  border: 4px solid var(--border-glass);
+}
+
+.music-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.music-title-large {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.music-artist-large {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Playback Wave Animation */
+.music-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 30px;
+  margin-top: 8px;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 5px;
+  background: var(--accent-color);
+  border-radius: 99px;
+  transition: height 0.2s ease;
+}
+
+.music-wave.active .wave-bar {
+  animation: wave-bounce 1s ease-in-out infinite;
+}
+
+.music-wave.active .wave-bar:nth-child(1) { animation-delay: 0.1s; }
+.music-wave.active .wave-bar:nth-child(2) { animation-delay: 0.3s; }
+.music-wave.active .wave-bar:nth-child(3) { animation-delay: 0.5s; }
+.music-wave.active .wave-bar:nth-child(4) { animation-delay: 0.2s; }
+.music-wave.active .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes wave-bounce {
+  0%, 100% { height: 5px; }
+  50% { height: 26px; }
+}
+
+.music-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.time-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.12);
+  outline: none;
+  cursor: pointer;
+}
+
+.time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+}
+
+.time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.playback-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ctrl-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+}
+
+.ctrl-btn:hover {
+  color: var(--accent-color-hover);
+}
+
+.ctrl-btn:active {
+  transform: scale(0.92);
+}
+
+.btn-play-large {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  color: black;
+}
+
+.btn-play-large:hover {
+  background: rgba(255,255,255,0.9);
+  color: black;
+}
+
+/* Playlist list */
+.playlist-container {
+  border-top: 1px solid var(--border-glass);
+  padding-top: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.playlist-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.track-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.track-row:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.track-row.active {
+  background: hsla(260, 80%, 65%, 0.15);
+  color: var(--accent-color-hover);
+  font-weight: 600;
+}
+
+/* SPOTIFY EMBED WINDOW */
+.spotify-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #121212;
+}
+
+.spotify-iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* PHOTOS PORTFOLIO */
+.photos-container {
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.photos-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.photos-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.photo-card {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.photo-card:hover {
+  transform: scale(1.04);
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.photo-card:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-label-large {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.photo-tag {
+  font-size: 9.5px;
+  color: var(--accent-color-hover);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* TRASH CONTAINER */
+.trash-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.trash-toolbar {
+  height: 40px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.trash-empty-btn {
+  background: none;
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.trash-empty-btn:hover {
+  background: var(--bg-glass-active);
+}
+
+.trash-main {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: start;
+}
+
+/* 9. LIGHTBOX COMPONENT SYSTEM */
+.lightbox-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(20px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lightbox-modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox-content {
+  max-width: 80vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.lightbox-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lightbox-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  max-width: 500px;
+  text-align: center;
+  margin-top: -8px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lightbox-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* 10. BOTTOM DOCK & ALIGNMENTS */
+.dock-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  pointer-events: none;
+  z-index: 5000;
+}
+
+.dock {
+  background-image: url('dock_bg.png') !important; /* Pick exact generated dynamic dock backdrop as requested */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+  transform-origin: center bottom;
+  height: 60px;
+}
+
+.dock-item {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: transform 0.15s ease, margin 0.15s ease;
+  transform-origin: center bottom;
+}
+
+.dock-icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  transition: width 0.15s ease, height 0.15s ease;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+}
+
+.dock-item:hover .dock-icon {
+  width: 58px;
+  height: 58px;
+  transform: translateY(-8px);
+}
+
+/* CSS Tooltip on Hover */
+.dock-tooltip {
+  position: absolute;
+  top: -42px;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.dock-item:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Active running dot indicator */
+.app-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--text-primary);
+  margin-top: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: absolute;
+  bottom: -6px;
+}
+
+.app-dot.active {
+  opacity: 0.9;
+}
+
+.dock-divider {
+  width: 1px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 0 4px;
+  align-self: center;
+}
+
+/* 11. LAUNCHPAD SYSTEM STYLE */
+.launchpad-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(40px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5vh 10vw;
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+}
+
+.launchpad-overlay.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.launchpad-search-container {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 3.5rem;
+}
+
+.launchpad-search {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: white;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  outline: none;
+  transition: background-color 0.2s;
+}
+
+.launchpad-search:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 3rem 2.5rem;
+  width: 100%;
+  max-width: 800px;
+  justify-items: center;
+}
+
+.launchpad-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-align: center;
+  width: 90px;
+}
+
+.launchpad-app:hover {
+  transform: scale(1.08);
+}
+
+.launchpad-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+}
+
+.launchpad-label {
+  font-size: 12.5px;
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+/* 12. GLASS UTILITY STYLES */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(25px) saturate(160%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-glass);
+}
+
+/* 13. MOBILE RESPONSIVE ADAPTATIONS */
+@media (max-width: 768px) {
+  .menu-left .menu-app-options {
+    display: none; /* Hide app sub-menu on mobile to save space */
+  }
+
+  .desktop-grid {
+    grid-auto-flow: row; /* Stack icons vertically on the left/right */
+    justify-content: start;
+    grid-template-columns: repeat(3, 80px);
+    gap: 16px;
+  }
+
+  /* Dock adjustments for small mobile screens */
+  .dock-container {
+    padding-bottom: 6px;
+    height: 70px;
+  }
+  
+  .dock {
+    height: 52px;
+    padding: 4px 8px;
+    gap: 6px;
+  }
+  
+  .dock-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dock-item:hover .dock-icon {
+    width: 44px;
+    height: 44px;
+    transform: translateY(-4px);
+  }
+
+  .dock-tooltip {
+    display: none; /* Tooltips behave poorly on mobile tap */
+  }
+
+  /* Adjust window shapes to fit screen */
+  .window {
+    top: 28px !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 84px) !important;
+    border-radius: 0;
+  }
+
+  .window-header {
+    cursor: default; /* Dragging doesn't make sense on full screen mobile */
+  }
+
+  /* App layouts on mobile */
+  .finder-sidebar {
+    width: 50px;
+    padding: 10px 4px;
+  }
+
+  .sidebar-item span {
+    display: none; /* Icon-only sidebar on mobile */
+  }
+
+  .notes-sidebar {
+    width: 80px;
+  }
+
+  .note-item-snippet, .note-item-date {
+    display: none;
+  }
+
+  .notes-body {
+    padding: 14px;
+  }
+  
+  .note-content-title {
+    font-size: 20px;
+  }
+}
+
+/* 14. SPOTIFY APP CUSTOM STYLING */
+.spotify-container {
+  display: flex;
+  height: 100%;
+  background-color: #121212;
+  color: white;
+}
+
+.spotify-player-panel {
+  flex: 1.3;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spotify-playlist-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #181818;
+  height: 100%;
+}
+
+.spotify-list-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1db954; /* Spotify green accent */
+}
+
+.spotify-track-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spotify-track-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.spotify-track-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.spotify-track-row.active {
+  background: rgba(29, 185, 84, 0.2);
+  color: #1db954;
+  font-weight: 600;
+}
+
+.spotify-track-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.spotify-track-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spotify-track-artist {
+  font-size: 10px;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spotify-track-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spotify-track-type {
+  font-size: 8px;
+  background: rgba(255,255,255,0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  color: #b3b3b3;
+}
+
+.spotify-track-delete-btn {
+  background: none;
+  border: none;
+  color: #ff5f56;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  padding: 2px;
+}
+
+.spotify-track-row:hover .spotify-track-delete-btn {
+  opacity: 1;
+}
+
+.spotify-add-form {
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #121212;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spotify-form-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #b3b3b3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.spotify-form-input {
+  background: #282828;
+  border: 1px solid transparent;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  outline: none;
+}
+
+.spotify-form-input:focus {
+  border-color: #1db954;
+}
+
+.spotify-form-btn {
+  background: #1db954;
+  color: black;
+  border: none;
+  font-weight: 700;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.spotify-form-btn:hover {
+  background: #1ed760;
+}
+
+.spotify-form-btn:active {
+  transform: scale(0.97);
+}
+

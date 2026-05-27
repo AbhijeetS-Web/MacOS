@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Abhijeet Sharma - macOS Portfolio</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Interactive macOS replica portfolio of Abhijeet Sharma - Digital Marketing Specialist, Shopify/Wordpress Developer, SEO & Graphic Designer. Explore his projects and skills in a native Apple-like UI.">
+  <meta name="keywords" content="Abhijeet Sharma, Digital Marketing, Performance Marketing, WordPress, Shopify, Graphic Design, Video Editor, SEO, portfolio, macOS website">
+  <meta name="author" content="Abhijeet Sharma">
+  <!-- Google Fonts for premium UI typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=SF+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- System Brightness Overlay filter -->
+  <div id="system-brightness-overlay" class="brightness-filter" aria-hidden="true"></div>
+
+  <!-- 1. BOOT SCREEN -->
+  <div id="boot-screen" class="boot-container">
+    <div class="boot-content">
+      <img src="logo.png" alt="Apple Logo" class="apple-logo" width="100" height="100">
+      
+      <!-- Interactive Click to Boot button to enable Web Audio -->
+      <button id="boot-button" class="glass-btn">Click to Boot</button>
+      
+      <!-- Progress Bar Container -->
+      <div id="progress-bar-container" class="progress-bar-wrapper hide">
+        <div id="boot-progress" class="progress-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. DESKTOP CONTAINER -->
+  <div id="desktop-container" class="desktop-wrapper blur-in">
+    
+    <!-- Top Menu Bar -->
+    <header class="menu-bar" id="menu-bar">
+      <div class="menu-left">
+        <!-- Apple Logo and Dropdown -->
+        <div class="menu-item-wrapper">
+          <button class="menu-btn apple-icon-btn" id="apple-menu-trigger" aria-label="Apple Menu">
+            <img src="logo.png" alt="Apple" width="16" height="16" style="filter: invert(var(--logo-invert, 0));">
+          </button>
+          <div class="dropdown-menu glass" id="apple-dropdown">
+            <button class="dropdown-item" onclick="openApp('about-mac')">About This Mac</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="openApp('notes')">System Preferences...</button>
+            <button class="dropdown-item" onclick="openApp('launchpad')">App Store (Launchpad)...</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="triggerRestart()">Restart...</button>
+            <button class="dropdown-item" onclick="triggerShutDown()">Shut Down...</button>
+          </div>
+        </div>
+
+        <!-- Active App Label -->
+        <span class="active-app-name" id="menu-active-app">Finder</span>
+        
+        <!-- App Menu Options -->
+        <div class="menu-app-options" id="menu-app-options">
+          <button class="menu-btn font-medium">File</button>
+          <button class="menu-btn">Edit</button>
+          <button class="menu-btn">View</button>
+          <button class="menu-btn">Go</button>
+          <button class="menu-btn">Window</button>
+          <button class="menu-btn">Help</button>
+        </div>
+      </div>
+
+      <div class="menu-right">
+        <!-- Wifi icon -->
+        <span class="menu-icon" aria-label="Wi-Fi Connected">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi"><path d="M12 20h.01"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 13a10 10 0 0 1 14 0"/><path d="M1.5 9.5a15 15 0 0 1 21 0"/></svg>
+        </span>
+        
+        <!-- Battery icon -->
+        <span class="menu-icon" aria-label="Battery 100%">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-battery-charging"><path d="M15 7h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M6 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h9"/><path d="M11 7V5"/><path d="M11 19v-2"/><line x1="22" x2="22" y1="11" y2="13"/><path d="m5 13 4-2-1 4 4-2"/></svg>
+        </span>
+
+        <!-- Control Center Panel Toggle -->
+        <button class="menu-btn cc-btn" id="cc-toggle" aria-label="Control Center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="12" x2="12" y1="18" y2="22"/></svg>
+        </button>
+
+        <!-- Dynamic Live Clock -->
+        <span class="menu-clock" id="menu-clock">Tue May 26 8:36 PM</span>
+      </div>
+
+      <!-- Control Center Panel Overlay -->
+      <div class="control-center glass" id="control-center">
+        <div class="cc-row">
+          <!-- WiFi Toggle Box -->
+          <div class="cc-box active" onclick="toggleWiFi()">
+            <div class="cc-icon-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h.01"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 13a10 10 0 0 1 14 0"/><path d="M1.5 9.5a15 15 0 0 1 21 0"/></svg>
+            </div>
+            <div class="cc-box-text">
+              <span class="cc-title">Wi-Fi</span>
+              <span class="cc-sub" id="cc-wifi-status">HomeNet_5G</span>
+            </div>
+          </div>
+          <!-- Bluetooth Toggle Box -->
+          <div class="cc-box active" onclick="toggleBluetooth()">
+            <div class="cc-icon-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bluetooth"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg>
+            </div>
+            <div class="cc-box-text">
+              <span class="cc-title">Bluetooth</span>
+              <span class="cc-sub" id="cc-bt-status">On</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cc-row-equal">
+          <!-- Dark Mode Toggle Box -->
+          <div class="cc-small-box active" id="cc-dark-mode" onclick="toggleDarkMode()">
+            <div class="cc-icon-circle-small">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            </div>
+            <span class="cc-label">Dark Mode</span>
+          </div>
+
+          <!-- Sound Effects Toggle Box -->
+          <div class="cc-small-box active" id="cc-sound-toggle" onclick="toggleSystemSounds()">
+            <div class="cc-icon-circle-small">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><path d="M11 4.702a.702.702 0 0 0-1.202-.496L5.386 8.614H3a1 1 0 0 0-1 1v4.772a1 1 0 0 0 1 1h2.386l4.412 4.408a.702.702 0 0 0 1.202-.496z"/><path d="M15.541 6.459a10.222 10.222 0 0 1 0 11.082"/><path d="M18.805 3.195a16.241 16.241 0 0 1 0 17.61"/></svg>
+            </div>
+            <span class="cc-label">SFX Enabled</span>
+          </div>
+        </div>
+
+        <!-- Slider Displays -->
+        <div class="cc-slider-wrapper">
+          <label for="display-brightness" class="cc-slider-label">Display</label>
+          <div class="cc-slider-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="cc-slider-icon"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <input type="range" id="display-brightness" min="20" max="100" value="100" class="cc-slider" oninput="changeBrightness(this.value)" aria-label="Screen Brightness">
+          </div>
+        </div>
+
+        <div class="cc-slider-wrapper">
+          <label for="system-volume" class="cc-slider-label">Volume</label>
+          <div class="cc-slider-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="cc-slider-icon"><path d="M11 4.702a.702.702 0 0 0-1.202-.496L5.386 8.614H3a1 1 0 0 0-1 1v4.772a1 1 0 0 0 1 1h2.386l4.412 4.408a.702.702 0 0 0 1.202-.496z"/><path d="M15.541 6.459a10.222 10.222 0 0 1 0 11.082"/></svg>
+            <input type="range" id="system-volume" min="0" max="100" value="80" class="cc-slider" oninput="changeVolume(this.value)" aria-label="System Volume">
+          </div>
+        </div>
+
+        <!-- Music Shortcut Widget -->
+        <div class="cc-music-widget" onclick="openApp('music')">
+          <div class="widget-album-art active" id="cc-album-art">🎵</div>
+          <div class="widget-details">
+            <span class="widget-track-name" id="cc-track-name">Digital Marketing Anthem</span>
+            <span class="widget-artist" id="cc-track-artist">Abhijeet Sharma</span>
+          </div>
+          <div class="widget-controls">
+            <button class="widget-play-btn" onclick="event.stopPropagation(); togglePlayPauseMusic()" id="cc-play-btn" aria-label="Play/Pause">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Desktop Canvas -->
+    <main class="desktop-canvas" id="desktop-canvas">
+      
+      <!-- Grid items of shortcuts -->
+      <div class="desktop-grid" id="desktop-grid">
+        <div class="grid-item" draggable="true" onclick="openApp('notes')">
+          <img src="https://img.icons8.com/color/96/000000/notepad.png" alt="Bio Document" class="grid-icon">
+          <span class="grid-label">About_Me.txt</span>
+        </div>
+        <div class="grid-item" draggable="true" onclick="openApp('finder')">
+          <img src="https://img.icons8.com/color/96/000000/folder-invoices.png" alt="Marketing Projects" class="grid-icon">
+          <span class="grid-label">My_Projects</span>
+        </div>
+        <div class="grid-item" draggable="true" onclick="openApp('terminal')">
+          <img src="https://img.icons8.com/color/96/000000/terminal.png" alt="Terminal Shell" class="grid-icon">
+          <span class="grid-label">Interactive_CLI</span>
+        </div>
+      </div>
+
+      <!-- App Windows will render here dynamically via JavaScript -->
+
+    </main>
+
+    <!-- Bottom macOS Glassmorphic Dock -->
+    <footer class="dock-container">
+      <div class="dock glass" id="dock" role="navigation" aria-label="Application Dock">
+        <!-- Finder App -->
+        <button class="dock-item" onclick="openApp('finder')" data-app="finder" aria-label="Finder">
+          <img src="https://img.icons8.com/fluency/96/000000/mac-os.png" alt="Finder" class="dock-icon">
+          <span class="dock-tooltip">Finder</span>
+          <div class="app-dot" id="dot-finder"></div>
+        </button>
+
+        <!-- Notes App (Skills & Resume) -->
+        <button class="dock-item" onclick="openApp('notes')" data-app="notes" aria-label="Notes">
+          <img src="https://img.icons8.com/color/96/000000/notepad.png" alt="Notes" class="dock-icon">
+          <span class="dock-tooltip">Notes</span>
+          <div class="app-dot" id="dot-notes"></div>
+        </button>
+
+        <!-- Photos App (Design Portfolio) -->
+        <button class="dock-item" onclick="openApp('photos')" data-app="photos" aria-label="Photos">
+          <img src="https://img.icons8.com/color/96/000000/photos.png" alt="Photos" class="dock-icon">
+          <span class="dock-tooltip">Photos</span>
+          <div class="app-dot" id="dot-photos"></div>
+        </button>
+
+        <!-- Mail App (Contact Abhijeet) -->
+        <button class="dock-item" onclick="openApp('mail')" data-app="mail" aria-label="Mail">
+          <img src="https://img.icons8.com/color/96/000000/mac-mail.png" alt="Mail" class="dock-icon">
+          <span class="dock-tooltip">Mail</span>
+          <div class="app-dot" id="dot-mail"></div>
+        </button>
+
+        <!-- Music App -->
+        <button class="dock-item" onclick="openApp('music')" data-app="music" aria-label="Music">
+          <img src="https://img.icons8.com/color/96/000000/apple-music.png" alt="Music" class="dock-icon">
+          <span class="dock-tooltip">Music Player</span>
+          <div class="app-dot" id="dot-music"></div>
+        </button>
+
+        <!-- Terminal App -->
+        <button class="dock-item" onclick="openApp('terminal')" data-app="terminal" aria-label="Terminal">
+          <img src="https://img.icons8.com/color/96/000000/console.png" alt="Terminal" class="dock-icon">
+          <span class="dock-tooltip">Terminal</span>
+          <div class="app-dot" id="dot-terminal"></div>
+        </button>
+
+        <div class="dock-divider"></div>
+
+        <!-- SPOTIFY INTEGRATION APP -->
+        <button class="dock-item" onclick="openApp('spotify')" data-app="spotify" aria-label="Spotify Playback">
+          <img src="https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" class="dock-icon">
+          <span class="dock-tooltip">Spotify Web</span>
+          <div class="app-dot" id="dot-spotify"></div>
+        </button>
+
+        <!-- Launchpad App -->
+        <button class="dock-item" onclick="toggleLaunchpad()" data-app="launchpad" aria-label="Launchpad">
+          <img src="https://img.icons8.com/color/96/000000/apps.png" alt="Launchpad" class="dock-icon">
+          <span class="dock-tooltip">Launchpad</span>
+        </button>
+
+        <!-- Trash App -->
+        <button class="dock-item" onclick="openApp('trash')" data-app="trash" aria-label="Trash Bin">
+          <img src="https://img.icons8.com/color/96/000000/trash.png" alt="Trash" class="dock-icon" id="trash-dock-icon">
+          <span class="dock-tooltip">Trash</span>
+          <div class="app-dot" id="dot-trash"></div>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 3. LAUNCHPAD OVERLAY -->
+  <div id="launchpad" class="launchpad-overlay hide">
+    <div class="launchpad-search-container">
+      <input type="text" id="launchpad-search" class="launchpad-search" placeholder="Search Applications" autocomplete="off" oninput="filterLaunchpadApps(this.value)">
+    </div>
+    <div class="launchpad-grid" id="launchpad-grid">
+      <!-- Generated Apps -->
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('finder')">
+        <img src="https://img.icons8.com/fluency/96/000000/mac-os.png" alt="Finder" class="launchpad-icon">
+        <span class="launchpad-label">Finder</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('notes')">
+        <img src="https://img.icons8.com/color/96/000000/notepad.png" alt="Notes" class="launchpad-icon">
+        <span class="launchpad-label">Notes</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('photos')">
+        <img src="https://img.icons8.com/color/96/000000/photos.png" alt="Photos" class="launchpad-icon">
+        <span class="launchpad-label">Photos</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('mail')">
+        <img src="https://img.icons8.com/color/96/000000/mac-mail.png" alt="Mail" class="launchpad-icon">
+        <span class="launchpad-label">Mail</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('music')">
+        <img src="https://img.icons8.com/color/96/000000/apple-music.png" alt="Music Player" class="launchpad-icon">
+        <span class="launchpad-label">Music</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('terminal')">
+        <img src="https://img.icons8.com/color/96/000000/console.png" alt="Terminal Shell" class="launchpad-icon">
+        <span class="launchpad-label">Terminal</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('spotify')">
+        <img src="https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify Widget" class="launchpad-icon">
+        <span class="launchpad-label">Spotify</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('about-mac')">
+        <img src="https://img.icons8.com/color/96/000000/info.png" alt="About Mac" class="launchpad-icon">
+        <span class="launchpad-label">About This Mac</span>
+      </div>
+      <div class="launchpad-app" onclick="closeLaunchpad(); openApp('trash')">
+        <img src="https://img.icons8.com/color/96/000000/trash.png" alt="Trash" class="launchpad-icon">
+        <span class="launchpad-label">Trash</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-time core scripting -->
+  <script src="app.js"></script>
+</body>
+</html>
